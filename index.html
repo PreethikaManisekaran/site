@@ -2,10 +2,107 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>ClusterVise</title>
-</head>
+    <title>Sign Up</title>
+    <!-- Styling for the sign-up page -->
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333333;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333333;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        // Function to handle sign-up form submission
+        function signUp() {
+            // Retrieve input values
+            var username = document.getElementById('username').value;
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
 
+            // Construct request body
+            var requestBody = JSON.stringify({
+                username: username,
+                email: email,
+                password: password
+            });
+
+            // Send POST request to API Gateway endpoint
+            fetch("https://fdalg2tr9l.execute-api.us-west-2.amazonaws.com/dev", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: requestBody
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to sign up');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Sign up successful');
+                // Optionally, redirect user to another page upon successful sign-up
+                // window.location.href = 'success.html';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to sign up. Please try again.');
+            });
+        }
+    </script>
+</head>
 <body>
-    clstervise
+    <h1>Sign Up</h1>
+    <form onsubmit="event.preventDefault(); signUp();">
+        <label for="username">Username:</label>
+        <input type="text" id="username" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+
+        <button type="submit">Sign Up</button>
+    </form>
 </body>
 </html>
