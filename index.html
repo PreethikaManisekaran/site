@@ -2,107 +2,77 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up</title>
-    <!-- Styling for the sign-up page -->
+    <title>To the Power of Math!</title>
+    <!-- Styling for the client UI -->
     <style>
-        body {
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+    h1 {
+        color: #FFFFFF;
+        font-family: system-ui;
+		margin-left: 20px;
         }
-        form {
-            max-width: 400px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	body {
+        background-color: #222629;
         }
-        h1 {
-            text-align: center;
-            color: #333333;
+    label {
+        color: #86C232;
+        font-family: system-ui;
+        font-size: 20px;
+        margin-left: 20px;
+		margin-top: 20px;
         }
-        label {
-            display: block;
-            margin-bottom: 10px;
-            color: #333333;
+     button {
+        background-color: #86C232;
+		border-color: #86C232;
+		color: #FFFFFF;
+        font-family: system-ui;
+        font-size: 20px;
+		font-weight: bold;
+        margin-left: 30px;
+		margin-top: 20px;
+		width: 140px;
         }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #cccccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #45a049;
+	 input {
+        color: #222629;
+        font-family: system-ui;
+        font-size: 20px;
+        margin-left: 10px;
+		margin-top: 20px;
+		width: 100px;
         }
     </style>
     <script>
-        // Function to handle sign-up form submission
-        function signUp() {
-            // Retrieve input values
-            var username = document.getElementById('username').value;
-            var email = document.getElementById('email').value;
-            var password = document.getElementById('password').value;
-
-            // Construct request body
-            var requestBody = JSON.stringify({
-                username: username,
-                email: email,
-                password: password
-            });
-
-            // Send POST request to API Gateway endpoint
-            fetch("https://fdalg2tr9l.execute-api.us-west-2.amazonaws.com/dev", {
+        // callAPI function that takes the base and exponent numbers as parameters
+        var callAPI = (base,exponent)=>{
+            // instantiate a headers object
+            var myHeaders = new Headers();
+            // add content type header to object
+            myHeaders.append("Content-Type", "application/json");
+            // using built in JSON utility package turn object to string and store in a variable
+            var raw = JSON.stringify({"base":base,"exponent":exponent});
+            // create a JSON object with parameters for API call and store in a variable
+            var requestOptions = {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: requestBody
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to sign up');
-                }
-                return response.json();
-            })
-            .then(data => {
-                alert('Sign up successful');
-                // Optionally, redirect user to another page upon successful sign-up
-                // window.location.href = 'success.html';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to sign up. Please try again.');
-            });
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            // make API call with parameters and use promises to get response
+            fetch("https://fdalg2tr9l.execute-api.us-west-2.amazonaws.com/dev", requestOptions)
+            .then(response => response.text())
+            .then(result => alert(JSON.parse(result).body))
+            .catch(error => console.log('error', error));
         }
     </script>
 </head>
 <body>
-    <h1>Sign Up</h1>
-    <form onsubmit="event.preventDefault(); signUp();">
-        <label for="username">Username:</label>
-        <input type="text" id="username" required>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" required>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" required>
-
-        <button type="submit">Sign Up</button>
+    <h1>TO THE POWER OF MATH!</h1>
+	<form>
+        <label>Base number:</label>
+        <input type="text" id="base">
+        <label>...to the power of:</label>
+        <input type="text" id="exponent">
+        <!-- set button onClick method to call function we defined passing input values as parameters -->
+        <button type="button" onclick="callAPI(document.getElementById('base').value,document.getElementById('exponent').value)">CALCULATE</button>
     </form>
 </body>
 </html>
